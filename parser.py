@@ -15,91 +15,68 @@ ba_bo_pattern = re.compile(r'BA_ \"(\S+)\" BO_ (\d+) (\d+);', re.MULTILINE)
 # Atribut semanl
 ba_sg_pattern = re.compile(r'BA_ \"(\S+)\" SG_ (\d+) (\S+) (-{0,1}(?:\d+|\d+\.\d*));', re.MULTILINE)
 
-# Functiile de parsare
-
-def parse_bo(text):
-    results = []
-    for m in bo_pattern.finditer(text):
-        # regex-ul de la mesaj are 3 grupuri
-        message_id = int(m.group(1))
-        message_name = m.group(2)
-        transmitter = m.group(3)
-        results.append({
-            'MESSAGE_ID': message_id,
-            'MESSAGE_NAME': message_name,
-            'TRANSMITTER': transmitter,
-            })
-    return results
-
-def parse_sg(text):
-    results = []
-    for m in sg_pattern.finditer(text):
-        # regex-ul de la semnal are 7 grupuri
-        signal_name = m.group(1)
-        multiplex = m.group(2) or None
-        factor = float(m.group(3))
-        offset = float(m.group(4))
-        min_val = float(m.group(5))
-        max_val = float(m.group(6))
-        unit = m.group(7)
-        results.append({
-            'SIGNAL_NAME': signal_name,
-            'MULTIPLEX': multiplex,
-            'FACTOR': factor,
-            'OFFSET': offset,
-            'MIN': min_val,
-            'MAX': max_val,
-            'UNIT': unit,
-        })
-    return results
-
-def parse_ba_bo(text):
-    results = []
-    for m in ba_bo_pattern.finditer(text):
-        # regex-ul de la atribute mesaj are 3 grupuri
-        attribute_name = m.group(1)
-        message_id = int(m.group(2))
-        value = int(m.group(3))
-        results.append({
-            'ATTRIBUTE_NAME': attribute_name,
-            'MESSAGE_ID': message_id,
-            'VALUE': value,
-        })
-    return results
-
-def parse_ba_sg(text):
-    results = []
-    for m in ba_sg_pattern.finditer(text):
-        # regex-ul de la atribute semnal are 4 grupuri
-        attribute_name = m.group(1)
-        signal_id = int(m.group(2))
-        signal_name = m.group(3)
-        value_str = m.group(4)
-        value = float(value_str) if '.' in value_str else int(value_str)
-        results.append({
-            'ATTRIBUTE_NAME': attribute_name,
-            'SIGNAL_ID': signal_id,
-            'SIGNAL_NAME': signal_name,
-            'VALUE': value,
-        })
-    return results
-
-# Functia de parsare unui fisier DBC
 def parse_dbc_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    messages = parse_bo(content)
-    signals = parse_sg(content)
-    ba_bo_attrs = parse_ba_bo(content)
-    ba_sg_attrs = parse_ba_sg(content)
+    lines = content.splitlines()
+        
+    messages = []
+    current_message = None
 
-    return {
-        'messages': messages,
-        'signals': signals,
-        'ba_bo_attributes': ba_bo_attrs,
-        'ba_sg_attributes': ba_sg_attrs,
-    }
+    for line in lines:
+        bo_match = bo_pattern.match(line)
+        if bo_match:
+            if current_message:
+                messages.append(current_message)
+            current_message = {
+                'MESSAGE_ID': int(bo_match.group(1)),
+                'MESSAGE_NAME': bo_match.group(2),
+                'TRANSMITTER': bo_match.group(3),
+                'SIGNALS': [],
+                'ATTRIBUTES': {},
+            }
+            continue
+
+        sg_match = sg_pattern.match(line)
+        if sg_match and current_message:
+            signal = {
+                'SIGNAL_NAME': sg_match.group(1),
+                'MULTIPLEX': sg_match.group(2) or None,
+                'FACTOR': float(sg_match.group(3)),
+                'OFFSET': float(sg_match.group(4)),
+                'MIN': float(sg_match.group(5)),
+                'MAX': float(sg_match.group(6)),
+                'UNIT': sg_match.group(7),
+                'ATTRIBUTES': {},
+            }
+            current_message['SIGNALS'].append(signal)
+
+    if current_message:
+        messages.append(current_message)
+
+    for m in ba_bo_pattern.finditer(content):
+        attr_name = m.group(1)
+        msg_id = int(m.group(2))
+        value = int(m.group(3))
+        for msg in messages:
+            if msg['MESSAGE_ID'] == msg_id:
+                msg['ATTRIBUTES'][attr_name] = value
+
+    for m in ba_sg_pattern.finditer(content):
+        attr_name = m.group(1)
+        msg_id = int(m.group(2))
+        signal_name = m.group(3)
+        value_str = m.group(4)
+        value = float(value_str) if '.' in value_str else int(value_str)
+        for msg in messages:
+            if msg['MESSAGE_ID'] == msg_id:
+                for sig in msg['SIGNALS']:
+                    if sig['SIGNAL_NAME'] == signal_name:
+                        sig['ATTRIBUTES'][attr_name] = value
+
+    return messages
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -112,20 +89,18 @@ if __name__ == "__main__":
         print(f"Eroare: Fisierul '{dbc_path}' nu a fost gasit!")
         sys.exit(1)
 
-    data = parse_dbc_file(dbc_path)
+    messages = parse_dbc_file(dbc_path)
 
-    print("Messages:")
-    for m in data['messages']:
-        print(m)
-
-    print("\nSignals:")
-    for s in data['signals']:
-        print(s)
-
-    print("\nBA_ attributes for messages:")
-    for a in data['ba_bo_attributes']:
-        print(a)
-
-    print("\nBA_ attributes for signals:")
-    for a in data['ba_sg_attributes']:
-        print(a)
+    for msg in messages:
+        print(f"\nMessage: {msg['MESSAGE_NAME']} (ID: {msg['MESSAGE_ID']}, Transmitter: {msg['TRANSMITTER']})")
+        if msg['ATTRIBUTES']:
+            print("  Message Attributes:")
+            for k, v in msg['ATTRIBUTES'].items():
+                print(f"    {k}: {v}")
+        print("  Signals:")
+        for sig in msg['SIGNALS']:
+            print(f"    - {sig['SIGNAL_NAME']} (Factor: {sig['FACTOR']}, Offset: {sig['OFFSET']}, Min: {sig['MIN']}, Max: {sig['MAX']}, Unit: {sig['UNIT']})")
+            if sig['ATTRIBUTES']:
+                print("      Signal Attributes:")
+                for k, v in sig['ATTRIBUTES'].items():
+                    print(f"        {k}: {v}")
