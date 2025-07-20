@@ -1,0 +1,3 @@
+SAFETY_FUNCTIONS = [
+    'ASIL_A', 'ASIL_B', 'ASIL_C', 'ASIL_D', 'QM'
+]
