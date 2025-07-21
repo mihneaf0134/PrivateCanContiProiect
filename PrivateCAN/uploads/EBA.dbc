@@ -1,0 +1,102 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: IMU HmiECU Radar_RR Radar_RL Radar_FR Radar_FL BrakeECU MainECU
+
+
+BO_ 7 TimeSync: 8 MainECU
+ SG_ CRC_07 : 16|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ seconds : 8|8@1- (1,0) [0|0] ""  Radar_RR,Radar_RL,Radar_FR,MainECU,Radar_FL
+ SG_ nanoseconds : 0|8@1- (1,0) [0|0] ""  Radar_RR,Radar_RL,Radar_FR,MainECU,Radar_FL
+
+BO_ 6 Object: 8 Radar_RR
+ SG_ CRC_06 : 56|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ width : 51|4@1- (1,0) [0|0] ""  MainECU
+ SG_ timestamp : 43|4@1- (1,0) [0|0] ""  MainECU
+ SG_ speed : 47|4@1- (1,0) [0|0] ""  MainECU
+ SG_ ObjID : 38|5@1- (1,0) [0|0] ""  MainECU
+ SG_ objectClassification : 34|4@1- (1,0) [0|0] ""  MainECU
+ SG_ Length : 30|4@1- (1,0) [0|0] ""  MainECU
+ SG_ distanceZ : 22|8@1- (1,0) [0|0] ""  MainECU
+ SG_ distanceY : 14|8@1- (1,0) [0|0] ""  MainECU
+ SG_ distanceX : 6|8@1- (1,0) [0|0] ""  MainECU
+ SG_ acceleration : 0|6@1- (1,0) [0|0] ""  MainECU
+
+BO_ 5 BrakeRequest: 8 MainECU
+ SG_ CRC_05 : 8|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ prefillRequest : 3|1@1- (1,0) [0|0] ""  BrakeECU
+ SG_ decelerationRequest : 2|1@1- (1,0) [0|0] ""  BrakeECU
+ SG_ warningRequest_L2 : 1|1@1- (1,0) [0|0] ""  HmiECU
+ SG_ warningRequest_L1 : 0|1@1- (1,0) [0|0] ""  HmiECU
+
+BO_ 0 BrakeFeedback: 8 BrakeECU
+ SG_ CRC_00 : 8|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ driverIntervention : 4|1@1- (1,0) [0|0] ""  MainECU
+ SG_ brakeFeedback : 0|4@1- (1,0) [0|0] ""  MainECU
+
+BO_ 3 RadarStatus_RL: 8 Radar_RL
+ SG_ CRC_03 : 24|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ numberOfObjects_RL : 9|8@1- (1,0) [0|0] ""  MainECU
+ SG_ MaxObjID_RL : 1|8@1- (1,0) [0|0] ""  MainECU
+ SG_ TimeSyncStatus_RL : 0|1@1- (1,0) [0|0] ""  MainECU
+
+BO_ 4 RadarStatus_RR: 8 Radar_RR
+ SG_ CRC_04 : 24|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ numberOfObjects_RR : 9|8@1- (1,0) [0|0] ""  MainECU
+ SG_ MaxObjID_RR : 1|8@1- (1,0) [0|0] ""  MainECU
+ SG_ TimeSyncStatus_RR : 0|1@1- (1,0) [0|0] ""  MainECU
+
+BO_ 2 RadarStatus_FR: 8 Radar_FR
+ SG_ CRC_02 : 24|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ numberOfObjects_FR : 9|8@1- (1,0) [0|0] ""  MainECU
+ SG_ MaxObjID_FR : 1|8@1- (1,0) [0|0] ""  MainECU
+ SG_ TimeSyncStatus_FR : 0|1@1- (1,0) [0|0] ""  MainECU
+
+BO_ 1 RadarStatus_FL: 8 Radar_FL
+ SG_ CRC_01 : 24|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ numberOfObjects_FL : 9|8@1- (1,0) [0|0] ""  MainECU
+ SG_ MaxObjID_FL : 1|8@1- (1,0) [0|0] ""  MainECU
+ SG_ TimeSyncStatus_FL : 0|1@1- (1,0) [0|0] ""  MainECU
+
+BO_TX_BU_ 6 : Radar_FL,Radar_FR,Radar_RL,Radar_RR;
+
+
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_  "MultiplexExtEnabled" ENUM  "No","Yes";
+BA_DEF_DEF_  "BusType" "CAN";
+BA_DEF_DEF_  "MultiplexExtEnabled" "No";
+
+
