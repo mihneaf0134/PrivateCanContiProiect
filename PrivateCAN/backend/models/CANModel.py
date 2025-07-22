@@ -1,10 +1,10 @@
 from typing import List, Dict
 
-from backend.models.Message import Message
-from backend.models.Attribute import Attribute
-from backend.models.ValueTable import ValueTable
-from backend.models import NetworkNode
-from backend.models import Signal
+from .Message import Message
+from .Attribute import Attribute
+from .ValueTable import ValueTable
+from .NetworkNode import NetworkNode
+from .Signal import Signal
 
 class CANModel:
     def __init__(self, network_nodes: List[NetworkNode], messages: List[Message],

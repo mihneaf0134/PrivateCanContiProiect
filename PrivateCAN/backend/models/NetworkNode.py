@@ -1,6 +1,7 @@
 from typing import List
-from backend.models import Signal
-from backend.models import Attribute
+
+from PrivateCAN.backend.models import Attribute, Signal
+
 
 class NetworkNode:
     def __init__(self, name: str, id: int, type: str, signals: List[Signal],

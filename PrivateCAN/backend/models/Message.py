@@ -1,7 +1,8 @@
 from typing import List
-from backend.models import Attribute
-from backend.models import Signal
-from backend.models import NetworkNode
+
+from PrivateCAN.backend.models import NetworkNode, Signal, Attribute
+
+
 class Message:
     def __init__(self, name: str, type: str, id: int, signals: List[Signal],
                  transmitters: List[NetworkNode], receivers: List[NetworkNode],

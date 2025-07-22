@@ -1,5 +1,7 @@
-from backend.models import Message, Signal, NetworkNode, ValueTable, Attribute,CANModel,SafetyFunction
 import re
+
+from PrivateCAN.backend.models import Message, NetworkNode, CANModel, Signal, SafetyFunction, Attribute
+
 
 class DBCParser:
     bo_pattern = re.compile(r'^BO_\s*(0{1}|(?:[1-9]\d*))\s*([^-\s]*)\s*:\s*(?:0{1}|(?:[1-9]\d*))\s*([^-\s]+)$', re.MULTILINE)

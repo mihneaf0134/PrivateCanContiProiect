@@ -1,8 +1,8 @@
 from typing import List
-from backend.models import ValueTable
-from backend.models import Attribute
-from backend.models import  SafetyFunction
-from backend.models import NetworkNode
+
+from PrivateCAN.backend.models import SafetyFunction, ValueTable, Attribute
+
+
 class Signal:
     def __init__(self, name: str, id: int, receivers: List['NetworkNode'],
                  factor: float, offset: float, minimum: float, maximum: float,
