@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CAN Network</title>
+    <style>
+        .message { margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; }
+        .signal { margin-left: 20px; margin-bottom: 10px; }
+        .attr { margin-left: 40px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>CAN Network Analysis</h1>
+
+    <h2>Messages</h2>
+    <div id="messages">
+        {% for msg in messages %}
+        <div class="message">
+            <h3>{{ msg.name }} (ID: {{ msg.id }})</h3>
+            <p>Transmitter: {{ msg.transmitters[0].name if msg.transmitters else 'Unknown' }}</p>
+
+            <h4>Signals</h4>
+            {% for sig in msg.signals %}
+            <div class="signal">
+                <strong>{{ sig.name }}</strong>
+                <p>Factor: {{ sig.factor }}, Offset: {{ sig.offset }}, Range: [{{ sig.minimum }}, {{ sig.maximum }}], Unit: {{ sig.unit }}</p>
+
+                {% if sig.attributes %}
+                <div class="attributes">
+                    <h5>Attributes</h5>
+                    {% for attr in sig.attributes %}
+                    <div class="attr">{{ attr.object_type }}: {{ attr.default_value }} ({{ attr.comment }})</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2>Raw JSON Data</h2>
+    <pre>{{ network_data }}</pre>
+
+    <a href="/">Upload another file</a>
+</body>
+</html>

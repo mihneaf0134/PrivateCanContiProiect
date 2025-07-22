@@ -1,5 +1,5 @@
 class ValueTable:
-    def __init__(self, name, comment):
+    def __init__(self, name : str, value : str, comment: str):
         self.name = name
         self.comment = comment
-        self.value = {}
+        self.value = value
