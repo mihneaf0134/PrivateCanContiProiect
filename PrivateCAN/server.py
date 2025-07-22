@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, json
 from werkzeug.utils import secure_filename
 import os
-from backend.parser import DBCParser
-from backend.serializer import CANModelSerializer
-from backend.models import *
+from PrivateCAN.backend.parser import DBCParser
+from PrivateCAN.backend.serializer import CANModelSerializer
+from PrivateCAN.backend.models import *
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'dbc'}

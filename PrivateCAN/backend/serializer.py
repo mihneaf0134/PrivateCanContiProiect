@@ -1,5 +1,5 @@
-from backend.models import ValueTable, Attribute
-from backend.models import CANModel, Message, Signal, NetworkNode
+from PrivateCAN.backend.models import ValueTable, Attribute
+from PrivateCAN.backend.models import CANModel, Message, Signal, NetworkNode
 import json
 from typing import Dict, Any
 
