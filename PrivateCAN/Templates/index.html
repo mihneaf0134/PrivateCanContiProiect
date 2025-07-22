@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CAN Bus Tool</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">SC. CAN<br>SRL.</div>
+      <nav>
+        <a href="/" class="btn selected">CONNECT</a>
+        <a href="/upload" class="btn">UPLOAD</a>
+        <a href="/network" class="btn">NETWORK</a>
+        <a href="/signals" class="btn">SIGNALS</a>
+        <a href="/save" class="btn">SAVE</a>
+      </nav>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+      <h2>Connect</h2>
+
+      <div class="connect-section">
+        <button class="action-button" id="connectBtn">>> CONNECT <<</button>
+
+        <div class="status-bar">
+          STATUS: <span id="status">Not Connected :(</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

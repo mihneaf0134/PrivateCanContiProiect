@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Network</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">SC. CAN<br>SRL.</div>
+      <nav>
+        <a href="/" class="btn">CONNECT</a>
+        <a href="/upload" class="btn">UPLOAD</a>
+        <a href="/network" class="btn selected">NETWORK</a>
+        <a href="/signals" class="btn">SIGNALS</a>
+        <a href="/save" class="btn">SAVE</a>
+      </nav>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+      <h2>Network</h2>
+
+      <div class="network-wrapper">
+        <div class="network-params">
+          <h3>Network Configuration</h3>
+          <p><em>Here you can configure cycle time, baud rate, and more.</em></p>
+          <button class="action-button">Add Node</button>
+          <button class="action-button">Edit Node</button>
+        </div>
+
+        <div class="network-visual">
+          <h3>CAN Network Visual Representation</h3>
+          <p><em>*graphical placeholder*</em></p>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        STATUS: <span id="status">Not Connected :(</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
