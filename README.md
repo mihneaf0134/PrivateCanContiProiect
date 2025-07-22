@@ -1,1 +1,1 @@
-# PrivateCanContiProiect
+# Private CAN design helper
