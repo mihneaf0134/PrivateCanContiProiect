@@ -1,16 +1,14 @@
 import re
-
 from PrivateCAN.backend.models import Message, NetworkNode, CANModel, Signal, SafetyFunction, Attribute
-
 
 class DBCParser:
     bo_pattern = re.compile(r'^BO_\s*(0{1}|(?:[1-9]\d*))\s*([^-\s]*)\s*:\s*(?:0{1}|(?:[1-9]\d*))\s*([^-\s]+)$', re.MULTILINE)
+    ba_bo_pattern = re.compile(r'BA_ \"(\S+)\" BO_ (\d+) (\d+);', re.MULTILINE)
     sg_pattern = re.compile(
         r'\s*SG_\s*([^-\s]*)\s*([^-\s]*)?\s*:\s*(?:0{1}|(?:[1-9]\d*))\|(?:0{1}|(?:[1-9]\d*))\@[01][+-]\s*'
         r'\(((?:0{1}|(?:[1-9]\d*))(?:\.\d+)?(?:[eE][-+]?\d*)?),\s*(-?(?:0{1}|(?:[1-9]\d*))(?:\.\d+)?(?:[eE][-+]?\d*)?)\)\s*'
         r'\[(0{1}|-?\d*\.?\d*|\d*[eE][-+]?\d*)\|\s*(0{1}|-?\d*\.?\d*|-?\d*\.?\d*[eE][-+]?\d*)\]\s*".*"\s*([^-\s]+)',
-        re.MULTILINE)
-    ba_bo_pattern = re.compile(r'BA_ \"(\S+)\" BO_ (\d+) (\d+);', re.MULTILINE)
+        re.MULTILINE)    
     ba_sg_pattern = re.compile(r'BA_ \"(\S+)\" SG_ (\d+) (\S+) (-{0,1}(?:\d+|\d+\.\d*));', re.MULTILINE)
 
     @staticmethod
@@ -58,20 +56,23 @@ class DBCParser:
                 signal = Signal(
                     name=sg_match.group(1),
                     id=len(signals) + 1,
-                    receivers=[],
-                    factor=float(sg_match.group(3)),
-                    offset=float(sg_match.group(4)),
-                    minimum=float(sg_match.group(5)),
-                    maximum=float(sg_match.group(6)),
-                    byte_order="little" if sg_match.group(0).split('@')[1][0] == '1' else "big",
+                    receivers=[sg_match.group(10)] if sg_match.group(10) else [],
+                    factor=float(sg_match.group(5)),
+                    offset=float(sg_match.group(6)),
+                    minimum=float(sg_match.group(7)),
+                    maximum=float(sg_match.group(8)),
+                    # little endian = Intel; big endian = Motorola
+                    byte_order="Intel" if sg_match.group(0).split('@')[1][0] == '1' else "Motorola",
                     type="unsigned" if sg_match.group(0).split('@')[1][1] == '+' else "signed",
-                    unit=sg_match.group(7),
+                    unit=sg_match.group(9),
                     safety_function=SafetyFunction.SafetyFunction.OM,
                     value_table=None,
+                    start_bit=int(sg_match.group(3)),
+                    bit_length=int(sg_match.group(4))
                 )
                 messages[-1].signals.append(signal)
                 signals.append(signal)
-
+        
         for m in DBCParser.ba_bo_pattern.finditer(content):
             attr_name = m.group(1)
             msg_id = int(m.group(2))
