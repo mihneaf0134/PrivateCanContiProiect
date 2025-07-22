@@ -1,2 +1,5 @@
 cantools~=40.2.3
 python_version~=3.12
+Flask>=2.3,<3.0
+Werkzeug>=2.3,<3.0
+
