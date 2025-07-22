@@ -73,7 +73,6 @@ class DBCParser:
                 messages[-1].signals.append(signal)
                 signals.append(signal)
         
-
         for m in DBCParser.ba_bo_pattern.finditer(content):
             attr_name = m.group(1)
             msg_id = int(m.group(2))
