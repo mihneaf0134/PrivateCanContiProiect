@@ -1,46 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CAN Network</title>
-    <style>
-        .message { margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; }
-        .signal { margin-left: 20px; margin-bottom: 10px; }
-        .attr { margin-left: 40px; color: #666; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Network</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid #444;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .data-table th {
+      background-color: #2a2a2a;
+      color: #4fc3f7;
+    }
+    .data-table tr:nth-child(even) {
+      background-color: #1e1e1e;
+    }
+    .data-table tr:hover {
+      background-color: #333;
+    }
+  </style>
 </head>
 <body>
-    <h1>CAN Network Analysis</h1>
-
-    <h2>Messages</h2>
-    <div id="messages">
-        {% for msg in messages %}
-        <div class="message">
-            <h3>{{ msg.name }} (ID: {{ msg.id }})</h3>
-            <p>Transmitter: {{ msg.transmitters[0].name if msg.transmitters else 'Unknown' }}</p>
-
-            <h4>Signals</h4>
-            {% for sig in msg.signals %}
-            <div class="signal">
-                <strong>{{ sig.name }}</strong>
-                <p>Factor: {{ sig.factor }}, Offset: {{ sig.offset }}, Range: [{{ sig.minimum }}, {{ sig.maximum }}], Unit: {{ sig.unit }}</p>
-
-                {% if sig.attributes %}
-                <div class="attributes">
-                    <h5>Attributes</h5>
-                    {% for attr in sig.attributes %}
-                    <div class="attr">{{ attr.object_type }}: {{ attr.default_value }} ({{ attr.comment }})</div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% endfor %}
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">SC. CAN<br>SRL.</div>
+      <nav>
+        <a href="/" class="btn">CONNECT</a>
+        <a href="/upload" class="btn">UPLOAD</a>
+        <a href="/network" class="btn selected">NETWORK</a>
+        <a href="/signals" class="btn">SIGNALS</a>
+        <a href="/save" class="btn">SAVE</a>
+      </nav>
     </div>
 
-    <h2>Raw JSON Data</h2>
-    <pre>{{ network_data }}</pre>
+    <!-- Main content -->
+    <div class="main">
+      <h2>Network - {{ filename }}</h2>
 
-    <a href="/">Upload another file</a>
+      <div class="network-wrapper">
+        <div class="network-params">
+          <h3>Network Configuration</h3>
+          {% if network_data %}
+            <div class="network-info">
+              <p><strong>Filename:</strong> {{ filename }}</p>
+              <p><strong>Nodes:</strong> {{ network_data.nodes|length }}</p>
+              <p><strong>Messages:</strong> {{ messages|length }}</p>
+              <p><strong>Signals:</strong> {{ signals|length }}</p>
+            </div>
+          {% else %}
+            <p><em>No network data loaded. Upload a DBC file first.</em></p>
+          {% endif %}
+        </div>
+
+        <div class="network-visual">
+          <h3>Messages</h3>
+          {% if messages %}
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>DLC</th>
+                  <th>Signals</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for message in messages %}
+                  <tr>
+                    <td>{{ message.id }}</td>
+                    <td>{{ message.name }}</td>
+                    <td>{{ message.dlc }}</td>
+                    <td>{{ message.signals|length if message.signals else 0 }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p><em>No messages found in the DBC file</em></p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="status-bar">
+        STATUS: <span id="status">Not Connected :(</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

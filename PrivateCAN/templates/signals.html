@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signals</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <strong>SC. CAN<br> SRL.</strong>
+      </div>
+      <nav>
+        <a href="/" class="btn">CONNECT</a>
+        <a href="/upload" class="btn">UPLOAD</a>
+        <a href="/network" class="btn">NETWORK</a>
+        <a href="/signals" class="btn selected">SIGNALS</a>
+        <a href="/optimize" class="btn">OPTIMIZE</a>
+        <a href="save" class="btn">SAVE</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <h2 style="font-style: italic; margin-top: 20px;">Signals</h2>
+
+      <div class="signals-container">
+        <!-- List section -->
+        <div class="signals-section">
+          <h3>List of existing signals/messages</h3>
+          {% if messages %}
+            <div class="messages-list">
+              {% for message in messages %}
+                <div class="message-item">
+                  <p><strong>Message ID:</strong> {{ message.id }}</p>
+                  <p><strong>Name:</strong> {{ message.name }}</p>
+                  <p><strong>Signals:</strong> {{ message.signals|length }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>No messages loaded</p>
+          {% endif %}
+          <button class="action-button" id="edit-message-btn">EDIT/DELETE</button>
+        </div>
+
+        <!-- Edit Message -->
+        <div class="signals-section">
+          <button class="action-button" id="edit-signal-btn">EDIT Signal</button>
+          {% if signals %}
+            <div class="signals-list">
+              {% for signal in signals %}
+                <div class="signal-item">
+                  <p><strong>{{ signal.name }}</strong> ({{ signal.type }})</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>No signals loaded</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Message Modal -->
+      <div id="edit-message-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" id="close-message-modal">&times;</span>
+          <h3>Edit Message</h3>
+          <form id="edit-message-form">
+            <label for="message-id">Message ID:</label>
+            <input type="text" id="message-id" name="id" required>
+
+            <label for="message-name">Name:</label>
+            <input type="text" id="message-name" name="name" required>
+
+            <label for="message-dlc">DLC:</label>
+            <input type="number" id="message-dlc" name="dlc" required>
+
+            <button type="submit" class="action-button">Save Changes</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Signal Modal -->
+      <div id="edit-signal-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" id="close-modal">&times;</span>
+          <h3>Edit Signal</h3>
+          <form id="edit-signal-form">
+            <label for="signal-name">Signal Name:</label>
+            <input type="text" id="signal-name" name="name" required>
+
+            <label for="signal-start-bit">Start Bit:</label>
+            <input type="number" id="signal-start-bit" name="start_bit" required>
+
+            <label for="signal-length">Length:</label>
+            <input type="number" id="signal-length" name="length" required>
+
+            <button type="submit" class="action-button">Save Changes</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        STATUS: <span id="status">Not Connected :(</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script-signal.js') }}"></script>
+</body>
+</html>
