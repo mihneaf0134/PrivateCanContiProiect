@@ -10,7 +10,6 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'dbc'}
 app.secret_key = 'your_secret_key_here'  # Needed for session
 
-# Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
@@ -26,7 +25,6 @@ def index():
 
 @app.route('/connect', methods=['POST'])
 def connect():
-    # Here you would implement actual CAN connection logic
     return jsonify({'status': 'connected'})
 
 
@@ -53,10 +51,8 @@ def upload_dbc():
             parser = DBCParser()
             can_model = parser.parse_dbc_to_model(filepath)
 
-            # Use your serializer to properly convert to dict
             network_data = CANModelSerializer.to_dict(can_model)
 
-            # Store serializable data in session
             session['network_data'] = network_data
             session['messages'] = network_data['messages']
             session['signals'] = network_data['signals']
@@ -97,6 +93,46 @@ def signals_page():
                            signals=signals,
                            filename=filename)
 
+@app.route('/optimize', methods=['POST'])
+def optimize():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    if file and allowed_file(file.filename):
+        from PrivateCAN.backend.optimizer import optimize_dbc
+        from werkzeug.utils import secure_filename
+        import os
+
+        dbc_content = file.read().decode('utf-8')
+
+        pack = request.form.get('opt_pack') == 'on'
+        prioritize = request.form.get('opt_priority') == 'on'
+        simplify = request.form.get('opt_simplify') == 'on'
+
+        optimized_db = optimize_dbc(dbc_content, pack=pack, prioritize=prioritize, simplify=simplify)
+        optimized_dbc = optimized_db.as_dbc_string()
+
+        optimized_filename = 'optimized_' + secure_filename(file.filename)
+        output_path = os.path.join(app.config['UPLOAD_FOLDER'], optimized_filename)
+
+        with open(output_path, 'w') as f:
+            f.write(optimized_dbc)
+
+        return jsonify({
+            'message': 'Optimization complete',
+            'download': url_for('download_file', filename=optimized_filename)
+        })
+
+    return jsonify({'error': 'Invalid file type'}), 400
+
+
+@app.route('/uploads/<filename>')
+def download_file(filename):
+    return redirect(url_for('static', filename='uploads/' + filename), code=302)
 
 @app.route('/optimize')
 def optimize_page():
@@ -110,14 +146,12 @@ def save_page():
 @app.route('/api/update_signal', methods=['POST'])
 def update_signal():
     data = request.get_json()
-    # Here you would implement actual signal update logic
     print("Signal updated:", data)
     return jsonify({"status": "success"})
 
 @app.route('/api/update_message', methods=['POST'])
 def update_message():
     data = request.get_json()
-    # Here you would implement actual message update logic
     print("Message updated:", data)
     return jsonify({"status": "success"})
 

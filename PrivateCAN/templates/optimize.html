@@ -1,79 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Optimize</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>DBC Optimizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-  <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="logo">
-        <strong>SC. CAN<br> SRL.</strong>
-      </div>
-      <nav>
-        <a href="/" class="btn">CONNECT</a>
-        <a href="/upload" class="btn">UPLOAD</a>
-        <a href="/network" class="btn">NETWORK</a>
-        <a href="/signals" class="btn">SIGNALS</a>
-        <a href="/optimize" class="btn selected">OPTIMIZE</a>
-        <a href="save" class="btn">SAVE</a>
-      </nav>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="card shadow rounded-4 p-4">
+        <h2 class="mb-4 text-center">Optimize Your DBC File</h2>
+
+        <form id="optimizeForm" method="post" enctype="multipart/form-data" action="/optimize">
+            <div class="mb-3">
+                <label for="dbcFile" class="form-label">Upload DBC File</label>
+                <input class="form-control" type="file" id="dbcFile" name="file" accept=".dbc" required>
+            </div>
+
+            <h5 class="mt-4">Select Optimizations</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="opt_pack" id="optPack" checked>
+                <label class="form-check-label" for="optPack">
+                     Message Packing – Combine signals into fewer CAN frames
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="opt_priority" id="optPriority" checked>
+                <label class="form-check-label" for="optPriority">
+                     Priority Optimization – Reorder CAN IDs by importance
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="opt_simplify" id="optSimplify" checked>
+                <label class="form-check-label" for="optSimplify">
+                     Simplification – Remove unused messages/signals
+                </label>
+            </div>
+
+            <div class="text-center mt-4">
+                <button class="btn btn-primary btn-lg px-5" type="submit">Optimize</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <!-- Main Content -->
-    <div class="main">
-      <h2 style="font-style: italic; margin-top: 20px;">Optimize</h2>
-
-      <div class="optimize-box">
-        <h3>List of suggestions</h3>
-
-        <!-- Sugestie 1 -->
-        <div class="suggestion-row">
-          <span class="arrow">---></span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
-          </div>
-        </div>
-
-        <!-- Sugestie 2 -->
-        <div class="suggestion-row">
-          <span class="arrow">---></span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
-          </div>
-        </div>
-
-        <!-- Sugestie 3 -->
-        <div class="suggestion-row">
-          <span class="arrow">.....</span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
-          </div>
-        </div>
-
-        <!-- Sugestie 4 -->
-        <div class="suggestion-row">
-          <span class="arrow">---></span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="status-bar">
-        STATUS: <span style="font-style: italic;">Connected :D / NOT Connected :(</span>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
