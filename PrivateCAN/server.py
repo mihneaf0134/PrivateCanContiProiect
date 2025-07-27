@@ -8,7 +8,7 @@ from PrivateCAN.backend.models import *
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'dbc'}
-app.secret_key = 'your_secret_key_here'  # Needed for session
+app.secret_key = 'your_secret_key_here'
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
