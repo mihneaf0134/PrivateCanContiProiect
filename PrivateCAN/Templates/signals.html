@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signals</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <strong>SC. CAN<br> SRL.</strong>
+      </div>
+      <nav>
+        <a href="/" class="btn">CONNECT</a>
+        <a href="/upload" class="btn">UPLOAD</a>
+        <a href="/network" class="btn">NETWORK</a>
+        <a href="/signals" class="btn">SIGNALS</a>
+        <a href="/optimize" class="btn">OPTIMIZE</a>
+        <a href="/save" class="btn">SAVE</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <h2 style="font-style: italic; margin-top: 20px;">Signals</h2>
+
+      <div class="signals-container">
+        <div class="signals-section">
+          <h3>List of existing signals/messages</h3>
+          <p>signal name, type, ID, length, etc.</p>
+          <p>message ID, cycle time, associated signals</p>
+          <button class="action-button">EDIT/DELETE</button>
+        </div>
+
+<div class="signals-section">
+  <button id="edit-message-btn" class="action-button">EDIT Message</button>
+  <p>*asemanator la candb*</p>
+</div>
+
+<!-- Modal pentru Edit Message -->
+<div id="edit-message-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="close-message-modal">&times;</span>
+    <h3>Edit Message</h3>
+    <form id="edit-message-form">
+  <label>Name:</label>
+  <input type="text" name="name" required>
+
+  <label>Type:</label>
+  <select name="type">
+    <option value="standard">CAN Standard</option>
+    <option value="extended">CAN Extended</option>
+  </select>
+
+  <label>ID:</label>
+  <input type="text" name="id" pattern="^0x[0-9A-Fa-f]{1,3}$" placeholder="ex: 0x150" required>
+
+  <label>DLC:</label>
+  <select name="dlc">
+    {% for i in range(1, 9) %}
+      <option value="{{ i }}">{{ i }}</option>
+    {% endfor %}
+  </select>
+
+  <label>Transmitter:</label>
+  <select name="transmitter" enabled>
+    <option value="***">***</option>
+  </select>
+
+  <label>Tx Method:</label>
+  <select name="tx_method" enabled>
+    <option value="n.a.">n.a.</option>
+  </select>
+
+  <label>Cycle Time (ms):</label>
+  <input type="number" name="cycle" min="0" value="0" required>
+
+  <button type="submit" class="action-button" style="margin-top: 20px;">Save Message</button>
+</form>
+
+  </div>
+</div>
+
+
+        <div class="signals-section">
+          <button id="edit-signal-btn" class="action-button">EDIT Signal</button>
+          <p>*asemanator la candb*</p>
+        </div>
+
+        <!-- Modal -->
+        <div id="edit-signal-modal" class="modal">
+          <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <h3>Edit Signal</h3>
+            <form id="edit-signal-form">
+              <label>Signal Name:</label>
+              <input type="text" name="name" required>
+
+              <label>Byte order:</label>
+              <select name="type">
+                <option value="intel">Intel</option>
+                <option value="motorola">Motorola</option>
+              </select>
+
+              <label>Length (bits):</label>
+              <input type="number" name="length" min="1" max="64" required>
+
+              <label>Value Type:</label>
+              <select name="type">
+                <option value="unsigned">Unsigned</option>
+                <option value="signed">Signed</option>
+                <option value="float">Float</option>
+              </select>
+
+              <label>Factor:</label>
+              <input type="number" step="any" name="factor">
+
+              <label>Offset:</label>
+              <input type="number" step="any" name="offset">
+
+              <label>Min Value:</label>
+              <input type="number" step="any" name="min">
+
+              <label>Max Value:</label>
+              <input type="number" step="any" name="max">
+
+              <label>Unit:</label>
+              <input type="text" name="unit">
+
+              <button type="submit" class="action-button" style="margin-top: 20px;">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        STATUS: <span id="status" style="font-style: italic;">Connected :D / NOT Connected :(</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script-signal.js') }}"></script>
+</body>
+</html>

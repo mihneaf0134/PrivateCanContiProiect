@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Optimize</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <strong>SC. CAN<br> SRL.</strong>
+      </div>
+      <nav>
+        <a href="/" class="btn">CONNECT</a>
+        <a href="/upload" class="btn">UPLOAD</a>
+        <a href="/network" class="btn">NETWORK</a>
+        <a href="/signals" class="btn">SIGNALS</a>
+        <a href="/optimize" class="btn selected">OPTIMIZE</a>
+        <a href="save" class="btn">SAVE</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <h2 style="font-style: italic; margin-top: 20px;">Optimize</h2>
+
+      <div class="optimize-box">
+        <h3>List of suggestions</h3>
+
+        <!-- Sugestie 1 -->
+        <div class="suggestion-row">
+          <span class="arrow">---></span>
+          <div class="actions">
+            <button class="action-button">Accept</button>
+            <span>OR</span>
+            <button class="action-button">Dismiss</button>
+          </div>
+        </div>
+
+        <!-- Sugestie 2 -->
+        <div class="suggestion-row">
+          <span class="arrow">---></span>
+          <div class="actions">
+            <button class="action-button">Accept</button>
+            <span>OR</span>
+            <button class="action-button">Dismiss</button>
+          </div>
+        </div>
+
+        <!-- Sugestie 3 -->
+        <div class="suggestion-row">
+          <span class="arrow">.....</span>
+          <div class="actions">
+            <button class="action-button">Accept</button>
+            <span>OR</span>
+            <button class="action-button">Dismiss</button>
+          </div>
+        </div>
+
+        <!-- Sugestie 4 -->
+        <div class="suggestion-row">
+          <span class="arrow">---></span>
+          <div class="actions">
+            <button class="action-button">Accept</button>
+            <span>OR</span>
+            <button class="action-button">Dismiss</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        STATUS: <span style="font-style: italic;">Connected :D / NOT Connected :(</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

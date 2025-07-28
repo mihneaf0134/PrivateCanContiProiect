@@ -3,4 +3,3 @@ class ValueTable:
         self.name = name
         self.comment = comment
         self.value = value
-
