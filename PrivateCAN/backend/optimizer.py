@@ -6,15 +6,21 @@ from cantools.database.can.signal import Signal
 def optimize_dbc(dbc_content: str, pack=True, prioritize=True, simplify=True):
     original_db = cantools.database.load_string(dbc_content, strict=False)
     new_db = Database()
+    change_log = {"removed_empty_messages": [], "reassigned_ids": [], "packed_signals": []}
 
     messages = original_db.messages
+
     if simplify:
+        before = len(messages)
         messages = [msg for msg in messages if msg.signals]
+        removed = before - len(messages)
+        change_log["removed_empty_messages"] = [msg.name for msg in original_db.messages if not msg.signals]
 
     if prioritize:
         messages.sort(key=lambda msg: (-len(msg.signals), msg.frame_id))
         base_id = 0x100
         for msg in messages:
+            change_log["reassigned_ids"].append((msg.name, hex(msg.frame_id), hex(base_id)))
             msg.frame_id = base_id
             base_id += 1
 
@@ -35,17 +41,10 @@ def optimize_dbc(dbc_content: str, pack=True, prioritize=True, simplify=True):
                         is_signed=sig.is_signed
                     )
                     packed_signals.append(new_sig)
+                    change_log["packed_signals"].append(sig.name)
                     current_bit += sig.length
                 else:
-
-                    other_msgs.append(Message(
-                        name=msg.name,
-                        frame_id=msg.frame_id,
-                        signals=msg.signals,
-                        length=msg.length,
-                        senders=msg.senders,
-                        is_extended_frame=msg.is_extended_frame
-                    ))
+                    other_msgs.append(msg)
                     break
 
         if packed_signals:
@@ -70,4 +69,4 @@ def optimize_dbc(dbc_content: str, pack=True, prioritize=True, simplify=True):
     for node in original_db.nodes:
         new_db.nodes.append(node)
 
-    return new_db
+    return new_db, change_log

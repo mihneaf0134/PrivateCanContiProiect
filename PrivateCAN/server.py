@@ -113,7 +113,7 @@ def optimize():
         prioritize = request.form.get('opt_priority') == 'on'
         simplify = request.form.get('opt_simplify') == 'on'
 
-        optimized_db = optimize_dbc(dbc_content, pack=pack, prioritize=prioritize, simplify=simplify)
+        optimized_db, change_log = optimize_dbc(dbc_content, pack=pack, prioritize=prioritize, simplify=simplify)
         optimized_dbc = optimized_db.as_dbc_string()
 
         optimized_filename = 'optimized_' + secure_filename(file.filename)
@@ -124,7 +124,8 @@ def optimize():
 
         return jsonify({
             'message': 'Optimization complete',
-            'download': url_for('download_file', filename=optimized_filename)
+            'download': url_for('download_file', filename=optimized_filename),
+            'log': change_log
         })
 
     return jsonify({'error': 'Invalid file type'}), 400
