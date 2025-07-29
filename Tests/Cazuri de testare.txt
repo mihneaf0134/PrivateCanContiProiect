@@ -1,0 +1,73 @@
+Cazuri de testare pentru fișiere DBC (CANdb++)
+
+	1. Fișiere incorecte
+   		- Format greșit (ex: .txt, .xml în loc de .dbc)
+   		- Fișier corupt (nu poate fi deschis sau citit)
+  	 	- Fișier gol sau conținând doar spații albe
+
+	2. Probleme de sintaxă
+  		- Linii incomplete (ex: BO_ fără detalii)
+   		- Lipsă separator (',', ':', ';')
+   		- Caractere nepermise în nume (semnale, mesaje, noduri)
+   		- Comentarii neînchise sau incorecte
+   		- Linii fără terminator corect (ex: lipsă ';')
+
+	3. Probleme cu mesajele (BO_)
+   		- Mesaje duplicate (același ID)
+   		- ID în afara domeniului CAN (standard sau extended)
+   		- Lungime invalidă (> 8 bytes pentru CAN clasic)
+   		- Număr de semnale mai mare decât capacitatea mesajului
+   		- Mesaje fără semnale
+
+	4. Probleme cu semnalele (SG_)
+   		- Semnale duplicate în același mesaj
+   		- Semnale care depășesc lungimea mesajului (bit + length > 64)
+   		- Suprapunere de semnale pe aceleași biți
+   		- Scaling factor invalid (ex: 0)
+   		- Semnale fără unitate (unde e obligatoriu)
+   		- Endianness incorect sau nedefinit
+
+	5. Probleme cu nodurile (BU_)
+   		- Noduri duplicate (același nume)
+   		- Noduri fără semnale asociate
+   		- Noduri fără rol definit (transmit/receive)
+
+	6. Probleme cu atributele (BA_)
+   		- Atribute fără tip definit (STRING, INT, etc.)
+   		- Valori incorecte (ex: min > max)
+   		- Atribute definite pe entități inexistente
+   		- Atribute duplicate
+
+	7. Probleme cu value table (VAL_)
+   		- Tabel fără nume
+   		- Valori fără descrieri
+   		- Valori duplicate pentru același semnal
+   		- Referințe la semnale inexistente
+
+	8. Probleme E2E (end-to-end, dacă sunt folosite)
+   		- Lipsă semnal CRC sau Counter acolo unde este așteptat
+   		- Dimensiune greșită sau plasare incorectă pentru semnalele E2E
+   		- Semnale E2E fără valori inițiale sau configurare incompletă
+
+	9. Probleme de stil sau convenție (opțional)
+   		- Nume care nu respectă convențiile interne (ex: CamelCase, prefixe)
+   		- Lipsă comentarii pentru mesaje sau semnale
+   		- Lipsă descrieri pentru noduri
+
+	10. Fișier valid
+   		- Toate entitățile sunt definite corect
+   		- Nu există duplicate sau conflicte
+   		- Lungimi, ID-uri, semnale și atribute sunt corecte
+   		- Regulile de business și E2E sunt respectate
+
+Cazuri de testare interfață
+	- verificare funcționalitate butoane interfață
+	- verificare upload fișier corect
+	- previzualizare fișier
+	- creare semnale și mesaje valide
+	- crearea unor semnale cu același ID
+	- crearea unor mesaje cu același ID
+	- crearea unor noduri din rețea (network node/ECU) cu aceeași adresă
+	- compatibilitate browser (de deschis în diferite browser-e ex Chrome, Edge, Firefox etc)
+	- verificare salvare fișier
+	- resetare după upload a unui nou fișier

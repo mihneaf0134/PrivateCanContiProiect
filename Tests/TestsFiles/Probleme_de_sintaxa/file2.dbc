@@ -1,0 +1,109 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+
+VAL_TABLE_ time_sync_status 1 "SYNC_ERROR" 0 "SYNC_OK  " ;
+VAL_TABLE_ obj_classification 1 "In motion" 0 "Static" ;
+
+
+BO_ 6 ObjectCompletion: 8 Vector__XXX
+ SG_ timestamp : 24|16@1+ (1,0) [0|65535] ""  MainECU
+ SG_ speed : 17|7@1- (2.103,103) [-31.592|235.489] "m/s"  MainECU
+ SG_ objectID : 12|5@1- (1,0) [0|0] ""  MainECU
+ SG_ E2E_CRC : 4|8@1+ (1,0) [0|0] ""  MainECU
+ SG_ E2E_Counter : 0|4@1+ (1,0) [0|15] ""  MainECU
+
+BO_ 5 Object: 8 FR
+ SG_ objectID : 58|5@1- (1,0) [0|0] "" Vector__XXX
+ SG_ width : 45|6@1+ (0.05,0) [0|3.15] "m"  MainECU
+ SG_ length : 51|6@1+ (0.1,0) [0|6.3] "m"  MainECU
+ SG_ height : 40|5@1+ (0.1,0) [0|3.1] "m"  MainECU
+ SG_ objectClassification : 57|1@1+ (1,0) [0|1] ""  MainECU
+ SG_ E2E_CRC : 0|8@1+ (1,0) [0|0] ""  MainECU
+ SG_ E2E_Counter : 8|4@1+ (1,0) [0|15] ""  MainECU
+ SG_ distanceZ : 28|6@1+ (0.1,0) [0|6.3] "m"  MainECU
+ SG_ distanceY : 21|7@1+ (0.2,-12.8) [-12.8|12.6] "m"  MainECU
+ SG_ distanceX : 12|9@1+ (0.5,0) [0|255.5] "m"  MainECU
+ SG_ acceleration : 34|6@1- (0.2,0) [-6.4|6.2] "m/s^2"  MainECU
+
+BO_ 0 New_Message_5: 8 Vector__XXX
+ SG_ seconds : 48|16@1+ (1,0) [0|65535] "" Vector__XXX
+ SG_ nanoseconds : 16|32@1+ (1,0) [0|4294967295] "ns" Vector__XXX
+ SG_ E2E_CRC : 8|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ E2E_Counter : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+
+BO_ 4 BrakeFeedback: 8 BrakeECU
+ SG_ E2E_CRC : 0|8@1+ (1,0) [0|0] ""  MainECU
+ SG_ E2E_Counter : 8|4@1+ (1,0) [0|15] ""  MainECU
+ SG_ driverIntervention : 17|1@1+ (1,0) [0|1] ""  MainECU
+ SG_ brakeFeedback : 12|5@1+ (4,0) [0|100] "percentage"  MainECU
+
+BO_ 3 BrakeRequest: 8 MainECU
+ SG_ E2E_CRC : 0|8@1+ (1,0) [0|0] ""  HmiECU,BrakeECU
+ SG_ E2E_Counter : 11|4@1+ (1,0) [0|15] ""  HmiECU,BrakeECU
+ SG_ preFillRequest : 10|1@1+ (1,0) [0|0] ""  HmiECU,BrakeECU
+ SG_ decelerationRequest : 9|1@1+ (1,0) [0|0] ""  HmiECU,BrakeECU
+ SG_ warningRequest_L2 : 16|8@1+ (1,0) [0|0] ""  HmiECU,BrakeECU
+ SG_ warningRequest_L1 : 8|1@1+ (1,0) [0|0] ""  HmiECU,BrakeECU
+
+BO_ 2 TimeSync: 8 MainECU
+ SG_ E2E_CRC : 0|8@1+ (1,0) [0|0] ""  HmiECU,BrakeECU,FR,FL,BR,BL
+ SG_ E2E_Counter : 56|4@1+ (1,0) [0|15] ""  HmiECU,BrakeECU,FR,FL,BR,BL
+ SG_ nanoseconds : 8|32@1+ (1,0) [0|4294967295] "ns"  HmiECU,BrakeECU,FR,FL,BR,BL
+ SG_ seconds : 40|16@1+ (1,0) [0|65535] ""  HmiECU,BrakeECU,FR,FL,BR,BL
+
+BO_ 1 Status: 8 BL
+ SG_ E2E_CRC : 0|8@1+ (1,0) [0|0] ""  MainECU
+ SG_ E2E_Counter : 13|4@1+ (1,0) [0|15] ""  MainECU
+ SG_ numberOfObject : 17|5@1+ (1,0) [0|0] ""  MainECU
+ SG_ MaxOBJID : 8|5@1+ (1,0) [0|31] ""  MainECU
+ SG_ timeSyncStatus : 22|1@1+ (1,0) [0|1] ""  MainECU
+
+BO_TX_BU_ 5 : BL,BR,FL,FR;
+BO_TX_BU_ 1 : FR,FL,BR,BL;
+
+
+BA_DEF_ BO_  "GenMsgCycle" INT 0 0;
+BA_DEF_ SG_  "FunctionalSafetyRating" ENUM  "QM","ASIL_A","ASIL_B","ASIL_C","ASIL_D";
+BA_DEF_  "MultiplexExtEnabled" ENUM  "No","Yes";
+BA_DEF_  "BusType" STRING ;
+BA_DEF_DEF_  "GenMsgCycle" 0;
+BA_DEF_DEF_  "FunctionalSafetyRating" "ASIL_D";
+BA_DEF_DEF_  "MultiplexExtEnabled" "No";
+BA_DEF_DEF_  "BusType" "CAN";
+BA_ "GenMsgCycle" BO_ 1 10;
+VAL_ 5 objectClassification 1 "In motion" 0 "Static" ;
+VAL_ 1 timeSyncStatus 1 "SYNC_ERROR" 0 "SYNC_OK  " ;
+
