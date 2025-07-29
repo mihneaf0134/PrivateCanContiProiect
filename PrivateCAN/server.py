@@ -109,13 +109,13 @@ def optimize():
 
         dbc_content = file.read().decode('utf-8')
 
-        repack = request.form.get('opt_pack') == 'on'  # updated name (still using the old checkbox)
+        repack = request.form.get('opt_pack') == 'on'
         prioritize = request.form.get('opt_priority') == 'on'
         simplify = request.form.get('opt_simplify') == 'on'
 
         optimized_db, change_log = optimize_dbc(
             dbc_content,
-            repack=repack,  # <- renamed from "pack"
+            repack=repack,
             prioritize=prioritize,
             simplify=simplify
         )
