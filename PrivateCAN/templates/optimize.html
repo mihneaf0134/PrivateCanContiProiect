@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <title>DBC Optimizer</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('dbcFile');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    fileInput.addEventListener('change', () => {
+      const fileName = fileInput.files.length ? fileInput.files[0].name : "No file selected";
+      fileNameDisplay.textContent = `Selected: ${fileName}`;
+      fileNameDisplay.style.color = "#4fc3f7";
+    });
+  });
+</script>
+
 </head>
 <body>
   <div class="container">
@@ -19,7 +32,6 @@
       </nav>
     </div>
 
-    <!-- Main content -->
     <div class="main">
       <h2>Optimize</h2>
 
@@ -30,6 +42,8 @@
             <p><strong>Drag and drop</strong> your file here<br>or</p>
             <input type="file" id="dbcFile" name="file" accept=".dbc" hidden required>
             <button class="action-button" onclick="document.getElementById('dbcFile').click(); return false;">Browse</button>
+              <p id="file-name" class="hint" style="margin-top: 10px;">No file selected</p>
+
             <p class="hint">Accepted: .dbc file only</p>
           </div>
 
