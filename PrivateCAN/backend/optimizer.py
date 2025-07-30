@@ -17,6 +17,7 @@ def _is_safety_critical(sig: Signal) -> bool:
 
 
 def _remove_duplicate_signals(messages, change_log):
+    """Remove duplicate signals inside each message (same name + definition)."""
     new_messages = []
     for msg in messages:
         seen = {}

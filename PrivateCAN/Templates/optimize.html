@@ -2,76 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Optimize</title>
+  <title>DBC Optimizer</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar -->
     <div class="sidebar">
-      <div class="logo">
-        <strong>SC. CAN<br> SRL.</strong>
-      </div>
+      <div class="logo">SC. CAN<br>SRL.</div>
       <nav>
         <a href="/" class="btn">CONNECT</a>
         <a href="/upload" class="btn">UPLOAD</a>
         <a href="/network" class="btn">NETWORK</a>
         <a href="/signals" class="btn">SIGNALS</a>
-        <a href="/optimize" class="btn selected">OPTIMIZE</a>
-        <a href="save" class="btn">SAVE</a>
+        <a href="/save" class="btn">SAVE</a>
       </nav>
     </div>
 
-    <!-- Main Content -->
     <div class="main">
-      <h2 style="font-style: italic; margin-top: 20px;">Optimize</h2>
+      <h2>Optimize</h2>
 
-      <div class="optimize-box">
-        <h3>List of suggestions</h3>
-
-        <!-- Sugestie 1 -->
-        <div class="suggestion-row">
-          <span class="arrow">---></span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
+      <div class="upload-section">
+        <h3>Upload and Optimize Your .dbc File</h3>
+        <form id="optimizeForm" method="post" enctype="multipart/form-data" action="/optimize">
+          <div class="upload-box">
+            <p><strong>Drag and drop</strong> your file here<br>or</p>
+            <input type="file" id="dbcFile" name="file" accept=".dbc" hidden required>
+            <button class="action-button" onclick="document.getElementById('dbcFile').click(); return false;">Browse</button>
+            <p class="hint">Accepted: .dbc file only</p>
           </div>
-        </div>
 
-        <!-- Sugestie 2 -->
-        <div class="suggestion-row">
-          <span class="arrow">---></span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
-          </div>
-        </div>
+          <h4 style="color: #4fc3f7; margin-top: 20px;">Select Optimizations</h4>
 
-        <!-- Sugestie 3 -->
-        <div class="suggestion-row">
-          <span class="arrow">.....</span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="opt_pack" id="optPack" checked>
+            <label class="form-check-label" for="optPack">
+              Bit Layout Optimization – Eliminate unused bits between signals
+            </label>
           </div>
-        </div>
 
-        <!-- Sugestie 4 -->
-        <div class="suggestion-row">
-          <span class="arrow">---></span>
-          <div class="actions">
-            <button class="action-button">Accept</button>
-            <span>OR</span>
-            <button class="action-button">Dismiss</button>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="opt_priority" id="optPriority" checked>
+            <label class="form-check-label" for="optPriority">
+              Priority Optimization – Reorder CAN IDs by importance
+            </label>
           </div>
-        </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="opt_simplify" id="optSimplify" checked>
+            <label class="form-check-label" for="optSimplify">
+              Simplification – Remove unused messages/signals, duplications
+            </label>
+          </div>
+
+          <button class="action-button" type="submit" style="margin-top: 20px;">Optimize</button>
+        </form>
       </div>
 
       <div class="status-bar">
-        STATUS: <span style="font-style: italic;">Connected :D / NOT Connected :(</span>
+        STATUS: <span id="status">Ready to Optimize</span>
       </div>
     </div>
   </div>

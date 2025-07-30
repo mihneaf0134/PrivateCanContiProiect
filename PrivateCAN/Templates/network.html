@@ -4,6 +4,28 @@
   <meta charset="UTF-8">
   <title>Network</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid #444;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .data-table th {
+      background-color: #2a2a2a;
+      color: #4fc3f7;
+    }
+    .data-table tr:nth-child(even) {
+      background-color: #1e1e1e;
+    }
+    .data-table tr:hover {
+      background-color: #333;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -21,19 +43,49 @@
 
     <!-- Main content -->
     <div class="main">
-      <h2>Network</h2>
+      <h2>Network - {{ filename }}</h2>
 
       <div class="network-wrapper">
         <div class="network-params">
           <h3>Network Configuration</h3>
-          <p><em>Here you can configure cycle time, baud rate, and more.</em></p>
-          <button class="action-button">Add Node</button>
-          <button class="action-button">Edit Node</button>
+          {% if network_data %}
+            <div class="network-info">
+              <p><strong>Filename:</strong> {{ filename }}</p>
+              <p><strong>Nodes:</strong> {{ network_data.nodes|length }}</p>
+              <p><strong>Messages:</strong> {{ messages|length }}</p>
+              <p><strong>Signals:</strong> {{ signals|length }}</p>
+            </div>
+          {% else %}
+            <p><em>No network data loaded. Upload a DBC file first.</em></p>
+          {% endif %}
         </div>
 
         <div class="network-visual">
-          <h3>CAN Network Visual Representation</h3>
-          <p><em>*graphical placeholder*</em></p>
+          <h3>Messages</h3>
+          {% if messages %}
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>DLC</th>
+                  <th>Signals</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for message in messages %}
+                  <tr>
+                    <td>{{ message.id }}</td>
+                    <td>{{ message.name }}</td>
+                    <td>{{ message.dlc }}</td>
+                    <td>{{ message.signals|length if message.signals else 0 }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p><em>No messages found in the DBC file</em></p>
+          {% endif %}
         </div>
       </div>
 

@@ -16,9 +16,9 @@
         <a href="/" class="btn">CONNECT</a>
         <a href="/upload" class="btn">UPLOAD</a>
         <a href="/network" class="btn">NETWORK</a>
-        <a href="/signals" class="btn">SIGNALS</a>
+        <a href="/signals" class="btn selected">SIGNALS</a>
         <a href="/optimize" class="btn">OPTIMIZE</a>
-        <a href="/save" class="btn">SAVE</a>
+        <a href="save" class="btn">SAVE</a>
       </nav>
     </div>
 
@@ -27,116 +27,84 @@
       <h2 style="font-style: italic; margin-top: 20px;">Signals</h2>
 
       <div class="signals-container">
+        <!-- List section -->
         <div class="signals-section">
           <h3>List of existing signals/messages</h3>
-          <p>signal name, type, ID, length, etc.</p>
-          <p>message ID, cycle time, associated signals</p>
-          <button class="action-button">EDIT/DELETE</button>
+          {% if messages %}
+            <div class="messages-list">
+              {% for message in messages %}
+                <div class="message-item">
+                  <p><strong>Message ID:</strong> {{ message.id }}</p>
+                  <p><strong>Name:</strong> {{ message.name }}</p>
+                  <p><strong>Signals:</strong> {{ message.signals|length }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>No messages loaded</p>
+          {% endif %}
+          <button class="action-button" id="edit-message-btn">EDIT/DELETE</button>
         </div>
 
-<div class="signals-section">
-  <button id="edit-message-btn" class="action-button">EDIT Message</button>
-  <p>*asemanator la candb*</p>
-</div>
-
-<!-- Modal pentru Edit Message -->
-<div id="edit-message-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" id="close-message-modal">&times;</span>
-    <h3>Edit Message</h3>
-    <form id="edit-message-form">
-  <label>Name:</label>
-  <input type="text" name="name" required>
-
-  <label>Type:</label>
-  <select name="type">
-    <option value="standard">CAN Standard</option>
-    <option value="extended">CAN Extended</option>
-  </select>
-
-  <label>ID:</label>
-  <input type="text" name="id" pattern="^0x[0-9A-Fa-f]{1,3}$" placeholder="ex: 0x150" required>
-
-  <label>DLC:</label>
-  <select name="dlc">
-    {% for i in range(1, 9) %}
-      <option value="{{ i }}">{{ i }}</option>
-    {% endfor %}
-  </select>
-
-  <label>Transmitter:</label>
-  <select name="transmitter" enabled>
-    <option value="***">***</option>
-  </select>
-
-  <label>Tx Method:</label>
-  <select name="tx_method" enabled>
-    <option value="n.a.">n.a.</option>
-  </select>
-
-  <label>Cycle Time (ms):</label>
-  <input type="number" name="cycle" min="0" value="0" required>
-
-  <button type="submit" class="action-button" style="margin-top: 20px;">Save Message</button>
-</form>
-
-  </div>
-</div>
-
-
+        <!-- Edit Message -->
         <div class="signals-section">
-          <button id="edit-signal-btn" class="action-button">EDIT Signal</button>
-          <p>*asemanator la candb*</p>
+          <button class="action-button" id="edit-signal-btn">EDIT Signal</button>
+          {% if signals %}
+            <div class="signals-list">
+              {% for signal in signals %}
+                <div class="signal-item">
+                  <p><strong>{{ signal.name }}</strong> ({{ signal.type }})</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>No signals loaded</p>
+          {% endif %}
         </div>
+      </div>
 
-        <!-- Modal -->
-        <div id="edit-signal-modal" class="modal">
-          <div class="modal-content">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <h3>Edit Signal</h3>
-            <form id="edit-signal-form">
-              <label>Signal Name:</label>
-              <input type="text" name="name" required>
+      <!-- Message Modal -->
+      <div id="edit-message-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" id="close-message-modal">&times;</span>
+          <h3>Edit Message</h3>
+          <form id="edit-message-form">
+            <label for="message-id">Message ID:</label>
+            <input type="text" id="message-id" name="id" required>
 
-              <label>Byte order:</label>
-              <select name="type">
-                <option value="intel">Intel</option>
-                <option value="motorola">Motorola</option>
-              </select>
+            <label for="message-name">Name:</label>
+            <input type="text" id="message-name" name="name" required>
 
-              <label>Length (bits):</label>
-              <input type="number" name="length" min="1" max="64" required>
+            <label for="message-dlc">DLC:</label>
+            <input type="number" id="message-dlc" name="dlc" required>
 
-              <label>Value Type:</label>
-              <select name="type">
-                <option value="unsigned">Unsigned</option>
-                <option value="signed">Signed</option>
-                <option value="float">Float</option>
-              </select>
+            <button type="submit" class="action-button">Save Changes</button>
+          </form>
+        </div>
+      </div>
 
-              <label>Factor:</label>
-              <input type="number" step="any" name="factor">
+      <!-- Signal Modal -->
+      <div id="edit-signal-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" id="close-modal">&times;</span>
+          <h3>Edit Signal</h3>
+          <form id="edit-signal-form">
+            <label for="signal-name">Signal Name:</label>
+            <input type="text" id="signal-name" name="name" required>
 
-              <label>Offset:</label>
-              <input type="number" step="any" name="offset">
+            <label for="signal-start-bit">Start Bit:</label>
+            <input type="number" id="signal-start-bit" name="start_bit" required>
 
-              <label>Min Value:</label>
-              <input type="number" step="any" name="min">
+            <label for="signal-length">Length:</label>
+            <input type="number" id="signal-length" name="length" required>
 
-              <label>Max Value:</label>
-              <input type="number" step="any" name="max">
-
-              <label>Unit:</label>
-              <input type="text" name="unit">
-
-              <button type="submit" class="action-button" style="margin-top: 20px;">Save Changes</button>
-            </form>
-          </div>
+            <button type="submit" class="action-button">Save Changes</button>
+          </form>
         </div>
       </div>
 
       <div class="status-bar">
-        STATUS: <span id="status" style="font-style: italic;">Connected :D / NOT Connected :(</span>
+        STATUS: <span id="status">Not Connected :(</span>
       </div>
     </div>
   </div>

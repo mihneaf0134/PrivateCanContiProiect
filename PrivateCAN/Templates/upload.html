@@ -29,12 +29,20 @@
           <p><strong>Drag and drop</strong> your file here<br>or</p>
           <input type="file" id="file-input" accept=".dbc" hidden>
           <button class="action-button" onclick="document.getElementById('file-input').click()">Browse</button>
-          <p class="hint">Accepted: .dbc file only (max size ?)</p>
-          <p class="preview-note"><em>*preview DBC file if uploaded successfully*</em></p>
+          <p class="hint">Accepted: .dbc file only</p>
+          <div id="file-preview" class="preview-note"></div>
         </div>
 
         <div id="upload-status" class="status-message">
           DBC FILE: not uploaded.
+        </div>
+
+        <div id="file-info" style="display: none; margin-top: 20px; background: #2a2a2a; padding: 15px; border-radius: 8px;">
+          <h4>File Information:</h4>
+          <p><strong>Filename:</strong> <span id="info-filename"></span></p>
+          <p><strong>Messages:</strong> <span id="info-messages"></span></p>
+          <p><strong>Signals:</strong> <span id="info-signals"></span></p>
+          <button class="action-button" id="view-network-btn" style="margin-top: 10px;">View Network</button>
         </div>
       </div>
 
@@ -44,6 +52,6 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='script-upload.js') }}"></script>
 </body>
 </html>
